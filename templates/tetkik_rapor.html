@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Tetkik Raporu{% endblock %}
+{% block page_header %}Tetkik Sonuç Raporu{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <a href="{{ url_for('tetkik_gecmis') }}" class="btn btn-secondary"><i class="bi bi-arrow-left"></i> Geri</a>
+  <a href="{{ url_for('tetkik_rapor_pdf', tid=tetkik.id) }}" class="btn btn-success"><i class="bi bi-file-earmark-pdf"></i> PDF İndir</a>
+</div>
+<div class="card p-4">
+  <h5 style="color:#123a54;">RequiemHBYS - Tetkik Sonuç Raporu</h5>
+  <hr>
+  <p><strong>Hasta:</strong> {{ tetkik.hasta_ad }}</p>
+  <p><strong>Tetkik:</strong> {{ tetkik.tetkik_adi }} ({{ tetkik.kodu }})</p>
+  <p><strong>İsteyen Doktor:</strong> {{ tetkik.isteyen_doktor }}</p>
+  <p><strong>İstem Tarihi:</strong> {{ tetkik.tarih }}</p>
+  <p><strong>Sonuç Tarihi:</strong> {{ tetkik.sonuc_tarihi or "-" }}</p>
+  <hr>
+  <h6>Sonuç</h6>
+  <p style="white-space: pre-wrap;">{{ tetkik.sonuc }}</p>
+</div>
+{% endblock %}

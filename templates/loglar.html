@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Log Kayıtları{% endblock %}
+{% block page_header %}Sistem Log Kayıtları{% endblock %}
+{% block content %}
+<div class="card p-3 mb-3">
+  <form method="get" class="row g-2 align-items-end">
+    <div class="col-md-3">
+      <label class="form-label small">Kategori</label>
+      <select name="kategori" class="form-select">
+        <option value="">Tümü</option>
+        {% for k in kategoriler %}
+        <option value="{{ k }}" {{ 'selected' if kategori==k }}>{{ k }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-md-3">
+      <label class="form-label small">Kullanıcı</label>
+      <input type="text" name="kullanici" value="{{ kullanici }}" class="form-control" placeholder="Kullanıcı adı / ad soyad">
+    </div>
+    <div class="col-md-2">
+      <label class="form-label small">Sonuç</label>
+      <select name="sonuc" class="form-select">
+        <option value="">Tümü</option>
+        <option value="Başarılı" {{ 'selected' if sonuc=='Başarılı' }}>Başarılı</option>
+        <option value="Başarısız" {{ 'selected' if sonuc=='Başarısız' }}>Başarısız</option>
+      </select>
+    </div>
+    <div class="col-md-2">
+      <button class="btn btn-primary w-100"><i class="bi bi-filter"></i> Filtrele</button>
+    </div>
+    <div class="col-md-2">
+      <a href="{{ url_for('loglar_disa_aktar', kategori=kategori, kullanici=kullanici, sonuc=sonuc) }}" class="btn btn-outline-secondary w-100"><i class="bi bi-file-earmark-spreadsheet"></i> CSV</a>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>Tarih</th><th>Kullanıcı</th><th>Rol</th><th>Kategori</th><th>İşlem</th><th>Açıklama</th><th>Sonuç</th></tr></thead>
+      <tbody>
+        {% for l in loglar %}
+        <tr>
+          <td class="text-nowrap small">{{ l.tarih }}</td>
+          <td>{{ l.kullanici_adi }}</td>
+          <td>{{ l.rol }}</td>
+          <td><span class="badge bg-secondary">{{ l.kategori }}</span></td>
+          <td>{{ l.islem }}</td>
+          <td class="small">{{ l.aciklama }}</td>
+          <td><span class="badge bg-{{ 'success' if l.sonuc=='Başarılı' else 'danger' }}">{{ l.sonuc }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

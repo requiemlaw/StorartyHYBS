@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<style>
+  body { font-family: Helvetica, Arial, sans-serif; font-size: 12px; }
+  h2 { color: #123a54; }
+  .satir { margin-bottom: 6px; }
+  hr { border-top: 1px solid #999; }
+  .sonuc { white-space: pre-wrap; margin-top: 10px; }
+</style>
+</head>
+<body>
+<h2>RequiemHBYS - Tetkik Sonuç Raporu</h2>
+<hr>
+<div class="satir"><strong>Hasta:</strong> {{ tetkik.hasta_ad }}</div>
+<div class="satir"><strong>Tetkik:</strong> {{ tetkik.tetkik_adi }} ({{ tetkik.kodu }})</div>
+<div class="satir"><strong>İsteyen Doktor:</strong> {{ tetkik.isteyen_doktor }}</div>
+<div class="satir"><strong>İstem Tarihi:</strong> {{ tetkik.tarih }}</div>
+<div class="satir"><strong>Sonuç Tarihi:</strong> {{ tetkik.sonuc_tarihi or "-" }}</div>
+<hr>
+<h3>Sonuç</h3>
+<div class="sonuc">{{ tetkik.sonuc }}</div>
+</body>
+</html>

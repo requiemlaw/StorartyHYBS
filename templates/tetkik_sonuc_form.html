@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Tetkik Sonucu{% endblock %}
+{% block page_header %}Tetkik Sonucu Gir - {{ tetkik.hasta_ad }}{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:700px;">
+  <p class="text-muted mb-3">
+    <strong>Hasta:</strong> {{ tetkik.hasta_ad }} &nbsp;|&nbsp;
+    <strong>Tetkik:</strong> {{ tetkik.tetkik_adi }} &nbsp;|&nbsp;
+    <strong>İsteyen Doktor:</strong> {{ tetkik.isteyen_doktor }}
+  </p>
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label">Sonuç</label>
+      <textarea class="form-control" name="sonuc" rows="6" placeholder="Tetkik sonucunu buraya yazın..." required>{{ tetkik.sonuc or "" }}</textarea>
+    </div>
+    <button class="btn btn-success"><i class="bi bi-check-circle"></i> Sonucu Kaydet</button>
+    <a href="{{ url_for('tetkik_gecmis') }}" class="btn btn-secondary">Vazgeç</a>
+  </form>
+</div>
+{% endblock %}

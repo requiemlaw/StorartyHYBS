@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8">
+<style>
+  body { font-family: Helvetica, Arial, sans-serif; font-size: 12px; }
+  h2 { color: #123a54; }
+  .satir { margin-bottom: 6px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+  th, td { border: 1px solid #999; padding: 5px; text-align: left; font-size: 11px; }
+  th { background: #123a54; color: #fff; }
+  hr { border-top: 1px solid #999; }
+</style>
+</head>
+<body>
+<h2>RequiemHBYS - Reçete</h2>
+<hr>
+<div class="satir"><strong>Reçete No:</strong> {{ muayene.id }} &nbsp;&nbsp; <strong>Tarih:</strong> {{ muayene.tarih }}</div>
+<div class="satir"><strong>Hasta:</strong> {{ muayene.hasta_ad }}</div>
+<div class="satir"><strong>Doktor:</strong> {{ muayene.doktor_ad }}</div>
+<div class="satir"><strong>Tanı:</strong> {{ muayene.tani or "-" }}</div>
+<table>
+  <thead><tr><th>#</th><th>İlaç Adı</th><th>Dozaj</th><th>Kullanım Açıklaması</th></tr></thead>
+  <tbody>
+    {% for r in receteler %}
+    <tr><td>{{ loop.index }}</td><td>{{ r.ilac }}</td><td>{{ r.doz or "-" }}</td><td>{{ r.aciklama or "-" }}</td></tr>
+    {% else %}
+    <tr><td colspan="4">Reçeteye ilaç eklenmemiş.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</body>
+</html>

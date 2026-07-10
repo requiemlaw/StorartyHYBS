@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Hasta Detay{% endblock %}
+{% block page_header %}Hasta Detayı - {{ hasta.ad_soyad }}{% endblock %}
+{% block content %}
+<a href="{{ url_for('hastalar') }}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Geri</a>
+
+<div class="card p-4 mb-3">
+  <div class="row">
+    <div class="col-md-3"><strong>Ad Soyad:</strong><br>{{ hasta.ad_soyad }}</div>
+    <div class="col-md-2"><strong>TC:</strong><br>{{ hasta.tc }}</div>
+    <div class="col-md-2"><strong>Doğum:</strong><br>{{ hasta.dogum_tarihi or "-" }}</div>
+    <div class="col-md-2"><strong>Cinsiyet:</strong><br>{{ hasta.cinsiyet or "-" }}</div>
+    <div class="col-md-3"><strong>Kan Grubu:</strong><br>{{ hasta.kan_grubu or "-" }}</div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-4"><strong>Telefon:</strong><br>{{ hasta.telefon or "-" }}</div>
+    <div class="col-md-5"><strong>Adres:</strong><br>{{ hasta.adres or "-" }}</div>
+    <div class="col-md-3"><strong>Kayıt:</strong><br>{{ hasta.kayit_tarihi }}</div>
+  </div>
+  {% if hasta.gecmis %}
+  <hr>
+  <strong>Hasta Geçmişi / Kronik Hastalıklar:</strong>
+  <p class="mb-0">{{ hasta.gecmis }}</p>
+  {% endif %}
+</div>
+
+<ul class="nav nav-tabs" id="detayTab">
+  <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-randevu">Randevular ({{ randevular|length }})</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-muayene">Muayeneler ({{ muayeneler|length }})</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-tetkik">Tetkikler ({{ tetkikler|length }})</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-yatis">Yatışlar ({{ yatislar|length }})</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-ameliyat">Ameliyatlar ({{ ameliyatlar|length }})</button></li>
+</ul>
+
+<div class="tab-content border p-3 bg-white">
+  <div class="tab-pane fade show active" id="tab-randevu">
+    <table class="table table-sm table-hover">
+      <thead><tr><th>Tarih</th><th>Saat</th><th>Doktor</th><th>Durum</th></tr></thead>
+      <tbody>
+        {% for r in randevular %}
+        <tr><td>{{ r.tarih }}</td><td>{{ r.saat }}</td><td>{{ r.doktor_ad }}</td>
+          <td><span class="badge bg-{{ 'success' if r.durum=='Tamamlandı' else ('warning' if r.durum=='Bekliyor' else 'secondary') }}">{{ r.durum }}</span></td></tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted">Randevu bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane fade" id="tab-muayene">
+    <table class="table table-sm table-hover">
+      <thead><tr><th>Tarih</th><th>Doktor</th><th>Tanı</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for m in muayeneler %}
+        <tr><td>{{ m.tarih }}</td><td>{{ m.doktor_ad }}</td><td>{{ m.tani or "-" }}</td>
+          <td><a href="{{ url_for('recete_yazdir', muayene_id=m.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-text"></i> Reçete</a></td></tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted">Muayene bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane fade" id="tab-tetkik">
+    <table class="table table-sm table-hover">
+      <thead><tr><th>Tarih</th><th>Tetkik</th><th>Durum</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for t in tetkikler %}
+        <tr><td>{{ t.tarih }}</td><td>{{ t.tetkik_adi }}</td>
+          <td><span class="badge bg-{{ 'success' if t.durum=='Sonuçlandı' else 'warning' }}">{{ t.durum }}</span></td>
+          <td>{% if t.durum == 'Sonuçlandı' %}<a href="{{ url_for('tetkik_rapor', tid=t.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-earmark-text"></i> Rapor</a>{% endif %}</td></tr>
+        {% else %}
+        <tr><td colspan="4" class="text-center text-muted">Tetkik bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane fade" id="tab-yatis">
+    <table class="table table-sm table-hover">
+      <thead><tr><th>Yatış Tarihi</th><th>Servis</th><th>Oda</th><th>Durum</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for y in yatislar %}
+        <tr><td>{{ y.yatis_tarihi }}</td><td>{{ y.servis }}</td><td>{{ y.oda }}</td>
+          <td><span class="badge bg-{{ 'success' if y.durum=='Yatıyor' else 'secondary' }}">{{ y.durum }}</span></td>
+          <td>{% if y.durum != 'Yatıyor' %}<a href="{{ url_for('servis_ozet', yid=y.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-earmark-text"></i> Özet</a>{% endif %}</td></tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted">Yatış bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane fade" id="tab-ameliyat">
+    <table class="table table-sm table-hover">
+      <thead><tr><th>Tarih</th><th>Ameliyat</th><th>Cerrah</th><th>Durum</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for a in ameliyatlar %}
+        <tr><td>{{ a.tarih }}</td><td>{{ a.ameliyat_adi }}</td><td>{{ a.cerrah_ad }}</td>
+          <td><span class="badge bg-{{ 'success' if a.durum=='Tamamlandı' else 'secondary' }}">{{ a.durum }}</span></td>
+          <td><a href="{{ url_for('ameliyat_rapor', aid=a.id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-earmark-text"></i> Rapor</a></td></tr>
+        {% else %}
+        <tr><td colspan="5" class="text-center text-muted">Ameliyat bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
