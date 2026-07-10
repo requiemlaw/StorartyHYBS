@@ -39,7 +39,7 @@
       </div>
       <div class="col-md-6">
         <label class="form-label">Telefon</label>
-        <input class="form-control" name="telefon" value="{{ hasta.telefon if hasta else '' }}">
+        <input type=text class="form-control" name="telefon" value="{{ hasta.telefon if hasta else '' }}" maxlength=11 oninput="this.value = this.value.replace(/[^0-9]/g, '')">
       </div>
       <div class="col-md-6">
         <label class="form-label">Adres</label>
@@ -51,7 +51,7 @@
       </div>
       <div class="col-md-6">
         <label class="form-label">Acil Kişi Telefon</label>
-        <input class="form-control" name="acil_tel" value="{{ hasta.acil_tel if hasta else '' }}">
+        <input tpye=text class="form-control" name="acil_tel" value="{{ hasta.acil_tel if hasta else '' }}" maxlength=11 oninput="this.value = this.value.replace(/[^0-9]/g, '')">
       </div>
       <div class="col-12">
         <label class="form-label">Hasta Geçmişi / Kronik Hastalıklar</label>
