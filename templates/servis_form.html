@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Yeni Yatış{% endblock %}
+{% block page_header %}Yeni Yatış{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:700px;">
+  <form method="post" action="{{ url_for('servis_kaydet') }}">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Hasta *</label>
+        <select class="form-select" name="hasta_id" required>
+          <option value="">Seçiniz</option>
+          {% for h in hastalar %}<option value="{{ h.id }}">{{ h.ad_soyad }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Servis *</label>
+        <select class="form-select" name="servis" required>
+          <option value="">Seçiniz</option>
+          {% for s in servisler %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Oda No *</label>
+        <input class="form-control" name="oda" required>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Yatak No</label>
+        <input class="form-control" name="yatak">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Yatış Tarihi</label>
+        <input class="form-control" name="yatis_tarihi" placeholder="gg.aa.yyyy">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Ön Tanı</label>
+        <input class="form-control" name="tani">
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-success"><i class="bi bi-check-circle"></i> Yatış Oluştur</button>
+      <a href="{{ url_for('servis') }}" class="btn btn-secondary">Vazgeç</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

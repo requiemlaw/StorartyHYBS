@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Servis / Yatış{% endblock %}
+{% block page_header %}Servis / Yatış Yönetimi{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('servis_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Yatış</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>ID</th><th>Hasta</th><th>Servis</th><th>Oda</th><th>Yatak</th><th>Yatış Tarihi</th><th>Ön Tanı</th><th>Durum</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for y in yatislar %}
+        <tr>
+          <td>{{ y.id }}</td><td>{{ y.hasta_ad }}</td><td>{{ y.servis }}</td><td>{{ y.oda }}</td><td>{{ y.yatak }}</td>
+          <td>{{ y.yatis_tarihi }}</td><td>{{ y.tani }}</td>
+          <td><span class="badge bg-{{ 'success' if y.durum=='Yatıyor' else 'secondary' }}">{{ y.durum }}</span></td>
+          <td>
+            {% if y.durum == 'Yatıyor' %}
+            <form action="{{ url_for('servis_taburcu', yid=y.id) }}" method="post" class="d-inline">
+              <button class="btn btn-sm btn-primary" title="Taburcu Et"><i class="bi bi-box-arrow-right"></i></button>
+            </form>
+            {% endif %}
+            <form action="{{ url_for('servis_sil', yid=y.id) }}" method="post" class="d-inline" onsubmit="return confirm('Yatış kaydı silinsin mi?');">
+              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

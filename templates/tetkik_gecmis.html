@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Geçmiş Tetkikler{% endblock %}
+{% block page_header %}Geçmiş Tetkik İstekleri{% endblock %}
+{% block content %}
+<a href="{{ url_for('tetkik') }}" class="btn btn-secondary mb-3"><i class="bi bi-arrow-left"></i> Geri</a>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>ID</th><th>Hasta</th><th>Kodu</th><th>Tetkik Adı</th><th>Adet</th><th>Durum</th><th>İsteyen Doktor</th><th>Tarih</th></tr></thead>
+      <tbody>
+        {% for t in tetkikler %}
+        <tr>
+          <td>{{ t.id }}</td><td>{{ t.hasta_ad }}</td><td>{{ t.kodu }}</td><td>{{ t.tetkik_adi }}</td>
+          <td>{{ t.adet }}</td><td><span class="badge bg-warning">{{ t.durum }}</span></td>
+          <td>{{ t.isteyen_doktor }}</td><td>{{ t.tarih }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

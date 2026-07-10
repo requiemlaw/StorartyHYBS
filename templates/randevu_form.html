@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Yeni Randevu{% endblock %}
+{% block page_header %}Yeni Randevu{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:650px;">
+  <form method="post" action="{{ url_for('randevu_kaydet') }}">
+    <div class="mb-3">
+      <label class="form-label">Hasta *</label>
+      <select class="form-select" name="hasta_id" required>
+        <option value="">Seçiniz</option>
+        {% for h in hastalar %}<option value="{{ h.id }}">{{ h.ad_soyad }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Doktor *</label>
+      <select class="form-select" name="doktor_id" required>
+        <option value="">Seçiniz</option>
+        {% for d in doktorlar %}<option value="{{ d.id }}">{{ d.ad_soyad }} ({{ d.poliklinik }})</option>{% endfor %}
+      </select>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Tarih (gg.aa.yyyy) *</label>
+        <input class="form-control" name="tarih" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Saat (ss:dd) *</label>
+        <input class="form-control" name="saat" required>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-success"><i class="bi bi-check-circle"></i> Randevu Oluştur</button>
+      <a href="{{ url_for('randevular') }}" class="btn btn-secondary">Vazgeç</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

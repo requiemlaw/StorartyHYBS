@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Yeni Ameliyat{% endblock %}
+{% block page_header %}Yeni Ameliyat Planlama{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:700px;">
+  <form method="post" action="{{ url_for('ameliyat_kaydet') }}">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Hasta *</label>
+        <select class="form-select" name="hasta_id" required>
+          <option value="">Seçiniz</option>
+          {% for h in hastalar %}<option value="{{ h.id }}">{{ h.ad_soyad }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Cerrah *</label>
+        <select class="form-select" name="doktor_id" required>
+          <option value="">Seçiniz</option>
+          {% for d in doktorlar %}<option value="{{ d.id }}">{{ d.ad_soyad }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Ameliyat Adı *</label>
+        <input class="form-control" name="ameliyat_adi" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Ameliyathane No</label>
+        <input class="form-control" name="salon">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Tarih</label>
+        <input class="form-control" name="tarih" placeholder="gg.aa.yyyy">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Saat</label>
+        <input class="form-control" name="saat" placeholder="ss:dd">
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-success"><i class="bi bi-check-circle"></i> Ameliyat Planla</button>
+      <a href="{{ url_for('ameliyat') }}" class="btn btn-secondary">Vazgeç</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

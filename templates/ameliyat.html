@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Ameliyat{% endblock %}
+{% block page_header %}Ameliyat Yönetimi{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('ameliyat_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Ameliyat</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>ID</th><th>Hasta</th><th>Ameliyat</th><th>Cerrah</th><th>Tarih</th><th>Saat</th><th>Salon</th><th>Durum</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for a in ameliyatlar %}
+        <tr>
+          <td>{{ a.id }}</td><td>{{ a.hasta_ad }}</td><td>{{ a.ameliyat_adi }}</td><td>{{ a.cerrah_ad }}</td>
+          <td>{{ a.tarih }}</td><td>{{ a.saat }}</td><td>{{ a.salon }}</td>
+          <td><span class="badge bg-{{ 'success' if a.durum=='Tamamlandı' else ('warning' if a.durum=='Devam Ediyor' else 'secondary') }}">{{ a.durum }}</span></td>
+          <td>
+            <form action="{{ url_for('ameliyat_durum', aid=a.id) }}" method="post" class="d-inline">
+              <input type="hidden" name="durum" value="Devam Ediyor">
+              <button class="btn btn-sm btn-warning" title="Devam Ediyor"><i class="bi bi-hourglass-split"></i></button>
+            </form>
+            <form action="{{ url_for('ameliyat_durum', aid=a.id) }}" method="post" class="d-inline">
+              <input type="hidden" name="durum" value="Tamamlandı">
+              <button class="btn btn-sm btn-primary" title="Tamamlandı"><i class="bi bi-check2"></i></button>
+            </form>
+            <form action="{{ url_for('ameliyat_durum', aid=a.id) }}" method="post" class="d-inline">
+              <input type="hidden" name="durum" value="İptal Edildi">
+              <button class="btn btn-sm btn-secondary" title="İptal Et"><i class="bi bi-x-lg"></i></button>
+            </form>
+            <form action="{{ url_for('ameliyat_sil', aid=a.id) }}" method="post" class="d-inline" onsubmit="return confirm('Ameliyat kaydı silinsin mi?');">
+              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

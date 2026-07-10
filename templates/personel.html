@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Personel{% endblock %}
+{% block page_header %}Personel Yönetimi{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('personel_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Personel</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>ID</th><th>Ad Soyad</th><th>Rol</th><th>Birim</th><th>Telefon</th><th>Kullanıcı Adı</th><th>Durum</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for p in personeller %}
+        <tr>
+          <td>{{ p.id }}</td><td>{{ p.ad_soyad }}</td><td>{{ p.rol }}</td><td>{{ p.birim }}</td>
+          <td>{{ p.telefon }}</td><td>{{ p.kullanici_adi }}</td>
+          <td><span class="badge bg-{{ 'success' if p.durum=='Aktif' else 'secondary' }}">{{ p.durum }}</span></td>
+          <td>
+            <a href="{{ url_for('personel_form', pid=p.id) }}" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
+            <form action="{{ url_for('personel_sil', pid=p.id) }}" method="post" class="d-inline" onsubmit="return confirm('Personel kaydı silinsin mi?');">
+              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

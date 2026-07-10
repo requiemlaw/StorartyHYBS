@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Personel Formu{% endblock %}
+{% block page_header %}{{ 'Personel Düzenle' if kisi else 'Yeni Personel' }}{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:650px;">
+  <form method="post" action="{{ url_for('personel_kaydet') }}">
+    <input type="hidden" name="id" value="{{ kisi.id if kisi else '' }}">
+    <div class="mb-3">
+      <label class="form-label">Adı Soyadı *</label>
+      <input class="form-control" name="ad_soyad" value="{{ kisi.ad_soyad if kisi else '' }}" required>
+    </div>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Rol *</label>
+        <select class="form-select" name="rol" required>
+          <option value="">Seçiniz</option>
+          {% for r in ["Hemşire", "Sekreter", "Laborant", "Yönetici", "Teknisyen", "Doktor"] %}
+          <option value="{{ r }}" {{ 'selected' if kisi and kisi.rol==r }}>{{ r }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Birim</label>
+        <select class="form-select" name="birim">
+          <option value="">Seçiniz</option>
+          {% for b in poliklinikler + ["Genel Yönetim", "Laboratuvar", "Acil Servis"] %}
+          <option value="{{ b }}" {{ 'selected' if kisi and kisi.birim==b }}>{{ b }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Telefon</label>
+        <input class="form-control" name="telefon" value="{{ kisi.telefon if kisi else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Kullanıcı Adı *</label>
+        <input class="form-control" name="kullanici_adi" value="{{ kisi.kullanici_adi if kisi else '' }}" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Şifre {{ '(değiştirmek için doldurun)' if kisi else '' }}</label>
+        <input type="password" class="form-control" name="sifre" placeholder="{{ '••••' if kisi else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Durum</label>
+        <select class="form-select" name="durum">
+          {% for d in ["Aktif", "Pasif"] %}
+          <option value="{{ d }}" {{ 'selected' if kisi and kisi.durum==d }}>{{ d }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-success"><i class="bi bi-check-circle"></i> Kaydet</button>
+      <a href="{{ url_for('personel') }}" class="btn btn-secondary">Vazgeç</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

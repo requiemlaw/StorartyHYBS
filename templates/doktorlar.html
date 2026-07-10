@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Doktorlar{% endblock %}
+{% block page_header %}Doktorlar{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('doktor_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Doktor</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>ID</th><th>Ad Soyad</th><th>Uzmanlık</th><th>Poliklinik</th><th>Uygunluk</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for d in doktorlar %}
+        <tr>
+          <td>{{ d.id }}</td><td>{{ d.ad_soyad }}</td><td>{{ d.uzmanlik }}</td><td>{{ d.poliklinik }}</td>
+          <td><span class="badge bg-{{ 'success' if d.uygunluk=='Müsait' else ('warning' if d.uygunluk=='Meşgul' else 'secondary') }}">{{ d.uygunluk }}</span></td>
+          <td>
+            <a href="{{ url_for('doktor_form', did=d.id) }}" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
+            <form action="{{ url_for('doktor_sil', did=d.id) }}" method="post" class="d-inline" onsubmit="return confirm('Doktor kaydı silinsin mi?');">
+              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

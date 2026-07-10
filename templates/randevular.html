@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Randevular{% endblock %}
+{% block page_header %}Randevular{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('randevu_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Randevu</a>
+</div>
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead><tr><th>ID</th><th>Hasta</th><th>Doktor</th><th>Tarih</th><th>Saat</th><th>Durum</th><th>İşlem</th></tr></thead>
+      <tbody>
+        {% for r in randevular %}
+        <tr>
+          <td>{{ r.id }}</td><td>{{ r.hasta_ad }}</td><td>{{ r.doktor_ad }}</td><td>{{ r.tarih }}</td><td>{{ r.saat }}</td>
+          <td>
+            <span class="badge bg-{{ 'success' if r.durum=='Tamamlandı' else ('warning' if r.durum=='Bekliyor' else 'secondary') }}">{{ r.durum }}</span>
+          </td>
+          <td>
+            <form action="{{ url_for('randevu_durum', rid=r.id) }}" method="post" class="d-inline">
+              <input type="hidden" name="durum" value="Tamamlandı">
+              <button class="btn btn-sm btn-primary" title="Tamamlandı Yap"><i class="bi bi-check2"></i></button>
+            </form>
+            <form action="{{ url_for('randevu_durum', rid=r.id) }}" method="post" class="d-inline">
+              <input type="hidden" name="durum" value="İptal Edildi">
+              <button class="btn btn-sm btn-warning" title="İptal Et"><i class="bi bi-x-lg"></i></button>
+            </form>
+            <form action="{{ url_for('randevu_sil', rid=r.id) }}" method="post" class="d-inline" onsubmit="return confirm('Randevu silinsin mi?');">
+              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

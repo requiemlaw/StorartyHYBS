@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Hasta Kayıt{% endblock %}
+{% block page_header %}Hasta Kayıt{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <form class="d-flex" method="get">
+    <input type="text" name="q" value="{{ q }}" class="form-control me-2" style="width:280px" placeholder="Ad Soyad / TC ile ara...">
+    <button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
+  </form>
+  <a href="{{ url_for('hasta_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Hasta</a>
+</div>
+
+<div class="card">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr><th>ID</th><th>Ad Soyad</th><th>TC</th><th>Doğum</th><th>Cinsiyet</th><th>Kan Grubu</th><th>Telefon</th><th>Kayıt</th><th>İşlem</th></tr>
+      </thead>
+      <tbody>
+        {% for h in hastalar %}
+        <tr>
+          <td>{{ h.id }}</td><td>{{ h.ad_soyad }}</td><td>{{ h.tc }}</td><td>{{ h.dogum_tarihi }}</td>
+          <td>{{ h.cinsiyet }}</td><td>{{ h.kan_grubu }}</td><td>{{ h.telefon }}</td><td>{{ h.kayit_tarihi }}</td>
+          <td>
+            <a href="{{ url_for('hasta_form', hid=h.id) }}" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
+            <form action="{{ url_for('hasta_sil', hid=h.id) }}" method="post" class="d-inline" onsubmit="return confirm('Bu hasta kaydı silinsin mi?');">
+              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="9" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

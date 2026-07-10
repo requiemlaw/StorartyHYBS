@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Kontrol Paneli{% endblock %}
+{% block page_header %}Kontrol Paneli{% endblock %}
+{% block content %}
+<div class="row g-3 mb-4">
+  <div class="col-md-3">
+    <div class="card card-stat p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div><div class="text-muted small">Toplam Hasta</div><div class="fs-3 fw-bold">{{ toplam_hasta }}</div></div>
+        <i class="bi bi-people icon text-primary"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div><div class="text-muted small">Bugünkü Randevu</div><div class="fs-3 fw-bold">{{ bugunku_randevu }}</div></div>
+        <i class="bi bi-calendar-check icon text-success"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div><div class="text-muted small">Yatan Hasta</div><div class="fs-3 fw-bold">{{ yatan_hasta }}</div></div>
+        <i class="bi bi-hospital icon text-danger"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card card-stat p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div><div class="text-muted small">Bekleyen Randevu</div><div class="fs-3 fw-bold">{{ bekleyen_randevu }}</div></div>
+        <i class="bi bi-hourglass-split icon text-warning"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h6 class="text-muted mb-3">Hızlı Erişim</h6>
+<div class="row g-3">
+  <div class="col-md-2">
+    <a href="{{ url_for('hastalar') }}" class="card module-card p-3 text-center h-100">
+      <i class="bi bi-person-vcard icon"></i><div class="mt-2">Hasta Kayıt</div>
+    </a>
+  </div>
+  <div class="col-md-2">
+    <a href="{{ url_for('randevular') }}" class="card module-card p-3 text-center h-100">
+      <i class="bi bi-calendar-check icon"></i><div class="mt-2">Randevular</div>
+    </a>
+  </div>
+  <div class="col-md-2">
+    <a href="{{ url_for('muayene') }}" class="card module-card p-3 text-center h-100">
+      <i class="bi bi-clipboard2-pulse icon"></i><div class="mt-2">Muayene</div>
+    </a>
+  </div>
+  <div class="col-md-2">
+    <a href="{{ url_for('servis') }}" class="card module-card p-3 text-center h-100">
+      <i class="bi bi-hospital icon"></i><div class="mt-2">Servis / Yatış</div>
+    </a>
+  </div>
+  <div class="col-md-2">
+    <a href="{{ url_for('ameliyat') }}" class="card module-card p-3 text-center h-100">
+      <i class="bi bi-bandaid icon"></i><div class="mt-2">Ameliyat</div>
+    </a>
+  </div>
+  <div class="col-md-2">
+    <a href="{{ url_for('tetkik') }}" class="card module-card p-3 text-center h-100">
+      <i class="bi bi-clipboard2-data icon"></i><div class="mt-2">Tetkik İstem</div>
+    </a>
+  </div>
+</div>
+{% endblock %}

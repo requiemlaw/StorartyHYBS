@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Tetkik İstem{% endblock %}
+{% block page_header %}Tetkik İstem - Laboratuvar / Görüntüleme{% endblock %}
+{% block content %}
+<div class="card p-3 mb-3">
+  <div class="row g-3">
+    <div class="col-md-4">
+      <label class="form-label fw-bold">Hasta</label>
+      <select class="form-select" id="hasta_id">
+        {% for h in hastalar %}<option value="{{ h.id }}">{{ h.ad_soyad }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-4">
+      <label class="form-label fw-bold">İsteyen Doktor</label>
+      <select class="form-select" id="doktor_ad">
+        {% for d in doktorlar %}<option value="{{ d.ad_soyad }}">{{ d.ad_soyad }} ({{ d.poliklinik }})</option>{% endfor %}
+      </select>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label fw-bold">Müracaat Tarihi</label>
+      <input class="form-control" value="{{ bugun }}" readonly>
+    </div>
+    <div class="col-md-2">
+      <label class="form-label fw-bold">Müracaat No</label>
+      <input class="form-control" value="{{ mreket_no }}" readonly>
+    </div>
+  </div>
+</div>
+
+<ul class="nav nav-tabs" id="tetkikTab">
+  <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#goruntuleme">Görüntüleme</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#laboratuvar">Laboratuvar</button></li>
+</ul>
+
+<form id="tetkik-form" method="post" action="{{ url_for('tetkik_kaydet') }}">
+  <input type="hidden" name="hasta_id" id="form_hasta_id">
+  <input type="hidden" name="doktor_ad" id="form_doktor_ad">
+
+  <div class="tab-content border p-3 bg-white">
+    <div class="tab-pane fade show active" id="goruntuleme">
+      <div class="row">
+        {% for t in goruntuleme %}
+        <div class="col-md-3 mb-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="tetkik[]" value="GRT{{ loop.index }}::{{ t }}" id="g{{ loop.index }}">
+            <label class="form-check-label small" for="g{{ loop.index }}">{{ t }}</label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="tab-pane fade" id="laboratuvar">
+      <div class="row">
+        {% for t in laboratuvar %}
+        <div class="col-md-3 mb-2">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" name="tetkik[]" value="LAB{{ loop.index }}::{{ t }}" id="l{{ loop.index }}">
+            <label class="form-check-label small" for="l{{ loop.index }}">{{ t }}</label>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3 d-flex justify-content-end gap-2">
+    <a href="{{ url_for('tetkik_gecmis') }}" class="btn btn-outline-primary"><i class="bi bi-clock-history"></i> Geçmiş İstekler</a>
+    <button type="submit" class="btn btn-success" onclick="return formuHazirla();"><i class="bi bi-check-circle"></i> Kaydet</button>
+  </div>
+</form>
+
+<script>
+function formuHazirla() {
+    document.getElementById('form_hasta_id').value = document.getElementById('hasta_id').value;
+    document.getElementById('form_doktor_ad').value = document.getElementById('doktor_ad').value;
+    return true;
+}
+</script>
+{% endblock %}

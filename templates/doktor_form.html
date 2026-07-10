@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Doktor Formu{% endblock %}
+{% block page_header %}{{ 'Doktor Düzenle' if doktor else 'Yeni Doktor' }}{% endblock %}
+{% block content %}
+<div class="card p-4" style="max-width:600px;">
+  <form method="post" action="{{ url_for('doktor_kaydet') }}">
+    <input type="hidden" name="id" value="{{ doktor.id if doktor else '' }}">
+    <div class="mb-3">
+      <label class="form-label">Adı Soyadı *</label>
+      <input class="form-control" name="ad_soyad" value="{{ doktor.ad_soyad if doktor else '' }}" required>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Poliklinik *</label>
+      <select class="form-select" name="poliklinik" required>
+        <option value="">Seçiniz</option>
+        {% for p in poliklinikler %}
+        <option value="{{ p }}" {{ 'selected' if doktor and doktor.poliklinik==p }}>{{ p }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Uygunluk Durumu</label>
+      <select class="form-select" name="uygunluk">
+        {% for u in ["Müsait", "Meşgul", "İzinli"] %}
+        <option value="{{ u }}" {{ 'selected' if doktor and doktor.uygunluk==u }}>{{ u }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <button class="btn btn-success"><i class="bi bi-check-circle"></i> Kaydet</button>
+    <a href="{{ url_for('doktorlar') }}" class="btn btn-secondary">Vazgeç</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Poliklinikler{% endblock %}
+{% block page_header %}Poliklinikler{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-md-6">
+    <div class="card p-3 mb-3">
+      <form method="post" action="{{ url_for('poliklinik_ekle') }}" class="d-flex gap-2">
+        <input type="text" name="ad" class="form-control" placeholder="Yeni poliklinik / bölüm adı" required>
+        <button class="btn btn-success"><i class="bi bi-plus-circle"></i> Ekle</button>
+      </form>
+    </div>
+    <div class="card">
+      <ul class="list-group list-group-flush">
+        {% for p in poliklinikler %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ p }}
+          <form method="post" action="{{ url_for('poliklinik_sil') }}" onsubmit="return confirm('Bu bölüm silinsin mi?');">
+            <input type="hidden" name="ad" value="{{ p }}">
+            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+          </form>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted text-center">Kayıt bulunamadı.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+{% endblock %}

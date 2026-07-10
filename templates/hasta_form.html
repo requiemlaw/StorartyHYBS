@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}Hasta Formu{% endblock %}
+{% block page_header %}{{ 'Hasta Düzenle' if hasta else 'Yeni Hasta' }}{% endblock %}
+{% block content %}
+<div class="card p-4">
+  <form method="post" action="{{ url_for('hasta_kaydet') }}">
+    <input type="hidden" name="id" value="{{ hasta.id if hasta else '' }}">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Adı Soyadı *</label>
+        <input class="form-control" name="ad_soyad" value="{{ hasta.ad_soyad if hasta else '' }}" required>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">TC Kimlik No *</label>
+        <input class="form-control" name="tc" value="{{ hasta.tc if hasta else '' }}" maxlength="11" required>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Doğum Tarihi (gg.aa.yyyy)</label>
+        <input class="form-control" name="dogum_tarihi" value="{{ hasta.dogum_tarihi if hasta else '' }}">
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Cinsiyet</label>
+        <select class="form-select" name="cinsiyet">
+          <option value="">Seçiniz</option>
+          {% for c in ["Erkek", "Kadın"] %}
+          <option value="{{ c }}" {{ 'selected' if hasta and hasta.cinsiyet==c }}>{{ c }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label">Kan Grubu</label>
+        <select class="form-select" name="kan_grubu">
+          <option value="">Seçiniz</option>
+          {% for k in ["A Rh+", "A Rh-", "B Rh+", "B Rh-", "AB Rh+", "AB Rh-", "0 Rh+", "0 Rh-"] %}
+          <option value="{{ k }}" {{ 'selected' if hasta and hasta.kan_grubu==k }}>{{ k }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Telefon</label>
+        <input class="form-control" name="telefon" value="{{ hasta.telefon if hasta else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Adres</label>
+        <input class="form-control" name="adres" value="{{ hasta.adres if hasta else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Acil Kişi Adı</label>
+        <input class="form-control" name="acil_ad" value="{{ hasta.acil_ad if hasta else '' }}">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Acil Kişi Telefon</label>
+        <input class="form-control" name="acil_tel" value="{{ hasta.acil_tel if hasta else '' }}">
+      </div>
+      <div class="col-12">
+        <label class="form-label">Hasta Geçmişi / Kronik Hastalıklar</label>
+        <textarea class="form-control" name="gecmis" rows="3">{{ hasta.gecmis if hasta else '' }}</textarea>
+      </div>
+    </div>
+    <div class="mt-4">
+      <button class="btn btn-success"><i class="bi bi-check-circle"></i> Kaydet</button>
+      <a href="{{ url_for('hastalar') }}" class="btn btn-secondary">Vazgeç</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

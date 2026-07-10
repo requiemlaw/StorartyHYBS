@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Muayene{% endblock %}
+{% block page_header %}Muayene - {{ randevu.hasta_ad }}{% endblock %}
+{% block content %}
+<div class="card p-4">
+  <p class="text-muted mb-3"><strong>Hasta:</strong> {{ randevu.hasta_ad }} &nbsp; | &nbsp; <strong>Doktor:</strong> {{ randevu.doktor_ad }} &nbsp; | &nbsp; <strong>Tarih:</strong> {{ randevu.tarih }} {{ randevu.saat }}</p>
+  <form method="post" action="{{ url_for('muayene_kaydet', rid=randevu.id) }}">
+    <div class="mb-3">
+      <label class="form-label">Şikayet</label>
+      <textarea class="form-control" name="sikayet" rows="2"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Tanı</label>
+      <textarea class="form-control" name="tani" rows="2"></textarea>
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Doktor Notu</label>
+      <textarea class="form-control" name="not_" rows="3"></textarea>
+    </div>
+
+    <h6 class="mt-4">Reçete</h6>
+    <div id="recete-alani">
+      <div class="row g-2 mb-2 recete-satir">
+        <div class="col-md-4"><input class="form-control" name="ilac[]" placeholder="İlaç Adı"></div>
+        <div class="col-md-3"><input class="form-control" name="doz[]" placeholder="Dozaj"></div>
+        <div class="col-md-4"><input class="form-control" name="aciklama[]" placeholder="Kullanım Açıklaması"></div>
+        <div class="col-md-1"><button type="button" class="btn btn-outline-danger w-100" onclick="this.closest('.recete-satir').remove()"><i class="bi bi-x"></i></button></div>
+      </div>
+    </div>
+    <button type="button" class="btn btn-outline-secondary btn-sm mb-3" onclick="ilacSatiriEkle()"><i class="bi bi-plus"></i> İlaç Satırı Ekle</button>
+
+    <div class="mt-3">
+      <button class="btn btn-success"><i class="bi bi-check-circle"></i> Muayeneyi Kaydet</button>
+      <a href="{{ url_for('muayene') }}" class="btn btn-secondary">Vazgeç</a>
+    </div>
+  </form>
+</div>
+
+<script>
+function ilacSatiriEkle() {
+    const alan = document.getElementById('recete-alani');
+    const satir = document.createElement('div');
+    satir.className = 'row g-2 mb-2 recete-satir';
+    satir.innerHTML = `
+        <div class="col-md-4"><input class="form-control" name="ilac[]" placeholder="İlaç Adı"></div>
+        <div class="col-md-3"><input class="form-control" name="doz[]" placeholder="Dozaj"></div>
+        <div class="col-md-4"><input class="form-control" name="aciklama[]" placeholder="Kullanım Açıklaması"></div>
+        <div class="col-md-1"><button type="button" class="btn btn-outline-danger w-100" onclick="this.closest('.recete-satir').remove()"><i class="bi bi-x"></i></button></div>`;
+    alan.appendChild(satir);
+}
+</script>
+{% endblock %}
