@@ -268,10 +268,11 @@ class Database:
                                 JOIN doktorlar d ON r.doktor_id=d.id WHERE r.durum='Bekliyor' ORDER BY r.id DESC""")
 
     def bugunun_randevulari_getir(self):
-        bugun = datetime.now().strftime("%d.%m.%Y")
+        # Tablonun boş kalmaması için burayı da düzeltiyoruz:
+        bugun_db_format = datetime.now().strftime("%Y-%m-%d")
         return self.sorgula("""SELECT r.id, r.tarih, r.saat, r.durum, h.ad_soyad as hasta_ad, d.ad_soyad as doktor_ad
                                 FROM randevular r JOIN hastalar h ON r.hasta_id=h.id
-                                JOIN doktorlar d ON r.doktor_id=d.id WHERE r.tarih=? ORDER BY r.saat""", (bugun,))
+                                JOIN doktorlar d ON r.doktor_id=d.id WHERE r.tarih=? ORDER BY r.saat""", (bugun_db_format,))
 
     def randevu_ekle(self, hasta_id, doktor_id, tarih, saat):
         return self.calistir("INSERT INTO randevular (hasta_id, doktor_id, tarih, saat, durum) VALUES (?,?,?,?,'Bekliyor')",
@@ -363,8 +364,9 @@ class Database:
         self.calistir("DELETE FROM ameliyatlar WHERE id=?", (aid,))
 
     def bugunku_ameliyat_sayisi(self):
-        bugun = datetime.now().strftime("%d.%m.%Y")
-        return self.sorgula("SELECT COUNT(*) as c FROM ameliyatlar WHERE tarih=?", (bugun,))[0]["c"]
+        # Burada da YYYY-MM-DD formatına geçiyoruz:
+        bugun_db_format = datetime.now().strftime("%Y-%m-%d")
+        return self.sorgula("SELECT COUNT(*) as c FROM ameliyatlar WHERE tarih=?", (bugun_db_format,))[0]["c"]
 
     def hasta_ameliyatlari_getir(self, hasta_id):
         return self.sorgula("""SELECT a.*, d.ad_soyad as cerrah_ad FROM ameliyatlar a
@@ -398,8 +400,11 @@ class Database:
     # ---- İstatistikler / Dashboard ----
     def istatistikleri_getir(self):
         toplam_hasta = self.sorgula("SELECT COUNT(*) as c FROM hastalar")[0]["c"]
-        bugun = datetime.now().strftime("%d.%m.%Y")
-        bugunku_randevu = self.sorgula("SELECT COUNT(*) as c FROM randevular WHERE tarih=?", (bugun,))[0]["c"]
+
+        # SADECE randevular için veritabanı formatını (YYYY-MM-DD) kullanıyoruz:
+        bugun_db_format = datetime.now().strftime("%Y-%m-%d")
+        bugunku_randevu = self.sorgula("SELECT COUNT(*) as c FROM randevular WHERE tarih=?", (bugun_db_format,))[0]["c"]
+
         yatan_hasta = self.sorgula("SELECT COUNT(*) as c FROM servis_yatislari WHERE durum='Yatıyor'")[0]["c"]
         bekleyen_randevu = self.sorgula("SELECT COUNT(*) as c FROM randevular WHERE durum='Bekliyor'")[0]["c"]
         return toplam_hasta, bugunku_randevu, yatan_hasta, bekleyen_randevu
@@ -411,12 +416,24 @@ class Database:
         gunler, hasta_sayilari, randevu_sayilari = [], [], []
         for i in range(6, -1, -1):
             gun = datetime.now() - timedelta(days=i)
+
+            # Hastalar için kullandığın format (DD.MM.YYYY)
             gun_str = gun.strftime("%d.%m.%Y")
+
+            # HTML5 <input type="date"> ile randevulara kaydedilen format (YYYY-MM-DD)
+            randevu_gun_str = gun.strftime("%Y-%m-%d")
+
+            # Grafikte x ekseninde görünecek etiket
             gunler.append(gun.strftime("%d.%m"))
+
+            # Hastaları ara
             hasta_sayilari.append(
                 self.sorgula("SELECT COUNT(*) as c FROM hastalar WHERE kayit_tarihi LIKE ?", (f"{gun_str}%",))[0]["c"])
+
+            # Randevuları YENİ FORMATA göre ara (randevu_gun_str)
             randevu_sayilari.append(
-                self.sorgula("SELECT COUNT(*) as c FROM randevular WHERE tarih=?", (gun_str,))[0]["c"])
+                self.sorgula("SELECT COUNT(*) as c FROM randevular WHERE tarih=?", (randevu_gun_str,))[0]["c"])
+
         return gunler, hasta_sayilari, randevu_sayilari
 
     # ---- Loglar ----
