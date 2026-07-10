@@ -2,6 +2,9 @@
 {% block title %}Muayene / Reçete{% endblock %}
 {% block page_header %}Muayene Bekleyen Randevular{% endblock %}
 {% block content %}
+<div class="d-flex justify-content-end mb-3">
+  <a href="{{ url_for('muayene_gecmis') }}" class="btn btn-outline-primary"><i class="bi bi-clock-history"></i> Geçmiş Muayeneler / Reçeteler</a>
+</div>
 <div class="card">
   <div class="table-responsive">
     <table class="table table-hover align-middle mb-0">

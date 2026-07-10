@@ -6,16 +6,24 @@
 <div class="card">
   <div class="table-responsive">
     <table class="table table-hover align-middle mb-0">
-      <thead><tr><th>ID</th><th>Hasta</th><th>Kodu</th><th>Tetkik Adı</th><th>Adet</th><th>Durum</th><th>İsteyen Doktor</th><th>Tarih</th></tr></thead>
+      <thead><tr><th>ID</th><th>Hasta</th><th>Kodu</th><th>Tetkik Adı</th><th>Adet</th><th>Durum</th><th>İsteyen Doktor</th><th>Tarih</th><th>İşlem</th></tr></thead>
       <tbody>
         {% for t in tetkikler %}
         <tr>
           <td>{{ t.id }}</td><td>{{ t.hasta_ad }}</td><td>{{ t.kodu }}</td><td>{{ t.tetkik_adi }}</td>
-          <td>{{ t.adet }}</td><td><span class="badge bg-warning">{{ t.durum }}</span></td>
+          <td>{{ t.adet }}</td>
+          <td><span class="badge bg-{{ 'success' if t.durum=='Sonuçlandı' else 'warning' }}">{{ t.durum }}</span></td>
           <td>{{ t.isteyen_doktor }}</td><td>{{ t.tarih }}</td>
+          <td>
+            {% if t.durum == 'Sonuçlandı' %}
+            <a href="{{ url_for('tetkik_rapor', tid=t.id) }}" class="btn btn-sm btn-primary"><i class="bi bi-file-earmark-text"></i> Rapor</a>
+            {% else %}
+            <a href="{{ url_for('tetkik_sonuc', tid=t.id) }}" class="btn btn-sm btn-success"><i class="bi bi-clipboard2-check"></i> Sonuç Gir</a>
+            {% endif %}
+          </td>
         </tr>
         {% else %}
-        <tr><td colspan="8" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
+        <tr><td colspan="9" class="text-center text-muted py-4">Kayıt bulunamadı.</td></tr>
         {% endfor %}
       </tbody>
     </table>

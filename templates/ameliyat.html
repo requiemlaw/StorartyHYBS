@@ -28,8 +28,9 @@
               <input type="hidden" name="durum" value="İptal Edildi">
               <button class="btn btn-sm btn-secondary" title="İptal Et"><i class="bi bi-x-lg"></i></button>
             </form>
+            <a href="{{ url_for('ameliyat_rapor', aid=a.id) }}" class="btn btn-sm btn-outline-primary" title="Rapor"><i class="bi bi-file-earmark-text"></i></a>
             <form action="{{ url_for('ameliyat_sil', aid=a.id) }}" method="post" class="d-inline" onsubmit="return confirm('Ameliyat kaydı silinsin mi?');">
-              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-sm btn-danger" title="Sil"><i class="bi bi-trash"></i></button>
             </form>
           </td>
         </tr>

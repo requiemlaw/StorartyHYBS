@@ -7,7 +7,10 @@
     <input type="text" name="q" value="{{ q }}" class="form-control me-2" style="width:280px" placeholder="Ad Soyad / TC ile ara...">
     <button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
   </form>
-  <a href="{{ url_for('hasta_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Hasta</a>
+  <div>
+    <a href="{{ url_for('hastalar_disa_aktar') }}" class="btn btn-outline-secondary"><i class="bi bi-file-earmark-spreadsheet"></i> CSV İndir</a>
+    <a href="{{ url_for('hasta_form') }}" class="btn btn-success"><i class="bi bi-plus-circle"></i> Yeni Hasta</a>
+  </div>
 </div>
 
 <div class="card">
@@ -22,9 +25,10 @@
           <td>{{ h.id }}</td><td>{{ h.ad_soyad }}</td><td>{{ h.tc }}</td><td>{{ h.dogum_tarihi }}</td>
           <td>{{ h.cinsiyet }}</td><td>{{ h.kan_grubu }}</td><td>{{ h.telefon }}</td><td>{{ h.kayit_tarihi }}</td>
           <td>
-            <a href="{{ url_for('hasta_form', hid=h.id) }}" class="btn btn-sm btn-primary"><i class="bi bi-pencil"></i></a>
+            <a href="{{ url_for('hasta_detay', hid=h.id) }}" class="btn btn-sm btn-outline-primary" title="Detay"><i class="bi bi-eye"></i></a>
+            <a href="{{ url_for('hasta_form', hid=h.id) }}" class="btn btn-sm btn-primary" title="Düzenle"><i class="bi bi-pencil"></i></a>
             <form action="{{ url_for('hasta_sil', hid=h.id) }}" method="post" class="d-inline" onsubmit="return confirm('Bu hasta kaydı silinsin mi?');">
-              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-sm btn-danger" title="Sil"><i class="bi bi-trash"></i></button>
             </form>
           </td>
         </tr>

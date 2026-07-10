@@ -3,42 +3,58 @@
 {% block page_header %}Kontrol Paneli{% endblock %}
 {% block content %}
 <div class="row g-3 mb-4">
-  <div class="col-md-3">
+  <div class="col-md-2">
     <div class="card card-stat p-3">
       <div class="d-flex justify-content-between align-items-center">
-        <div><div class="text-muted small">Toplam Hasta</div><div class="fs-3 fw-bold">{{ toplam_hasta }}</div></div>
+        <div><div class="text-muted small">Toplam Hasta</div><div class="fs-4 fw-bold">{{ toplam_hasta }}</div></div>
         <i class="bi bi-people icon text-primary"></i>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
     <div class="card card-stat p-3">
       <div class="d-flex justify-content-between align-items-center">
-        <div><div class="text-muted small">Bugünkü Randevu</div><div class="fs-3 fw-bold">{{ bugunku_randevu }}</div></div>
+        <div><div class="text-muted small">Bugünkü Randevu</div><div class="fs-4 fw-bold">{{ bugunku_randevu }}</div></div>
         <i class="bi bi-calendar-check icon text-success"></i>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
     <div class="card card-stat p-3">
       <div class="d-flex justify-content-between align-items-center">
-        <div><div class="text-muted small">Yatan Hasta</div><div class="fs-3 fw-bold">{{ yatan_hasta }}</div></div>
+        <div><div class="text-muted small">Yatan Hasta</div><div class="fs-4 fw-bold">{{ yatan_hasta }}</div></div>
         <i class="bi bi-hospital icon text-danger"></i>
       </div>
     </div>
   </div>
-  <div class="col-md-3">
+  <div class="col-md-2">
     <div class="card card-stat p-3">
       <div class="d-flex justify-content-between align-items-center">
-        <div><div class="text-muted small">Bekleyen Randevu</div><div class="fs-3 fw-bold">{{ bekleyen_randevu }}</div></div>
+        <div><div class="text-muted small">Bekleyen Randevu</div><div class="fs-4 fw-bold">{{ bekleyen_randevu }}</div></div>
         <i class="bi bi-hourglass-split icon text-warning"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card card-stat p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div><div class="text-muted small">Bekleyen Tetkik</div><div class="fs-4 fw-bold">{{ bekleyen_tetkik }}</div></div>
+        <i class="bi bi-clipboard2-data icon text-info"></i>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-2">
+    <div class="card card-stat p-3">
+      <div class="d-flex justify-content-between align-items-center">
+        <div><div class="text-muted small">Bugünkü Ameliyat</div><div class="fs-4 fw-bold">{{ bugunku_ameliyat }}</div></div>
+        <i class="bi bi-bandaid icon text-secondary"></i>
       </div>
     </div>
   </div>
 </div>
 
 <h6 class="text-muted mb-3">Hızlı Erişim</h6>
-<div class="row g-3">
+<div class="row g-3 mb-4">
   <div class="col-md-2">
     <a href="{{ url_for('hastalar') }}" class="card module-card p-3 text-center h-100">
       <i class="bi bi-person-vcard icon"></i><div class="mt-2">Hasta Kayıt</div>
@@ -70,4 +86,64 @@
     </a>
   </div>
 </div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-7">
+    <div class="card p-3 h-100">
+      <h6 class="text-muted mb-3">Son 7 Gün Trendi</h6>
+      <canvas id="trendChart" height="120"></canvas>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card p-3 h-100">
+      <h6 class="text-muted mb-3">Son Kaydedilen Hastalar</h6>
+      <ul class="list-group list-group-flush">
+        {% for h in son_hastalar %}
+        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+          <a href="{{ url_for('hasta_detay', hid=h.id) }}" class="text-decoration-none">{{ h.ad_soyad }}</a>
+          <span class="text-muted small">{{ h.kayit_tarihi }}</span>
+        </li>
+        {% else %}
+        <li class="list-group-item text-muted text-center px-0">Kayıt bulunamadı.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h6 class="text-muted mb-3">Bugünün Randevuları</h6>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover align-middle mb-0">
+        <thead><tr><th>Saat</th><th>Hasta</th><th>Doktor</th><th>Durum</th></tr></thead>
+        <tbody>
+          {% for r in bugunun_randevulari %}
+          <tr>
+            <td>{{ r.saat }}</td><td>{{ r.hasta_ad }}</td><td>{{ r.doktor_ad }}</td>
+            <td><span class="badge bg-{{ 'success' if r.durum=='Tamamlandı' else ('warning' if r.durum=='Bekliyor' else 'secondary') }}">{{ r.durum }}</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="text-center text-muted py-3">Bugün için randevu bulunmuyor.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: {{ gunler | tojson }},
+    datasets: [
+      { label: 'Yeni Hasta', data: {{ hasta_trend | tojson }}, borderColor: '#1c5a80', backgroundColor: 'rgba(28,90,128,.1)', tension: .3, fill: true },
+      { label: 'Randevu', data: {{ randevu_trend | tojson }}, borderColor: '#34c3ff', backgroundColor: 'rgba(52,195,255,.1)', tension: .3, fill: true }
+    ]
+  },
+  options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+});
+</script>
 {% endblock %}

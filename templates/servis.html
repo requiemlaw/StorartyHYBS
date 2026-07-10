@@ -20,9 +20,11 @@
             <form action="{{ url_for('servis_taburcu', yid=y.id) }}" method="post" class="d-inline">
               <button class="btn btn-sm btn-primary" title="Taburcu Et"><i class="bi bi-box-arrow-right"></i></button>
             </form>
+            {% else %}
+            <a href="{{ url_for('servis_ozet', yid=y.id) }}" class="btn btn-sm btn-outline-primary" title="Taburcu Özeti"><i class="bi bi-file-earmark-text"></i></a>
             {% endif %}
             <form action="{{ url_for('servis_sil', yid=y.id) }}" method="post" class="d-inline" onsubmit="return confirm('Yatış kaydı silinsin mi?');">
-              <button class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></button>
+              <button class="btn btn-sm btn-danger" title="Sil"><i class="bi bi-trash"></i></button>
             </form>
           </td>
         </tr>

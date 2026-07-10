@@ -12,20 +12,39 @@
 <div class="d-flex">
   <nav class="sidebar d-flex flex-column">
     <div class="sidebar-brand"><i class="bi bi-hospital"></i> RequiemHBYS</div>
-    <ul class="nav flex-column">
-      <li><a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path=='/' }}"><i class="bi bi-speedometer2"></i> Kontrol Paneli</a></li>
-      <li><a href="{{ url_for('hastalar') }}" class="{{ 'active' if '/hastalar' in request.path }}"><i class="bi bi-person-vcard"></i> Hasta Kayıt</a></li>
-      <li><a href="{{ url_for('doktorlar') }}" class="{{ 'active' if '/doktorlar' in request.path }}"><i class="bi bi-person-badge"></i> Doktorlar</a></li>
-      <li><a href="{{ url_for('poliklinikler') }}" class="{{ 'active' if '/poliklinikler' in request.path }}"><i class="bi bi-building"></i> Poliklinikler</a></li>
-      <li><a href="{{ url_for('randevular') }}" class="{{ 'active' if '/randevular' in request.path }}"><i class="bi bi-calendar-check"></i> Randevular</a></li>
-      <li><a href="{{ url_for('muayene') }}" class="{{ 'active' if '/muayene' in request.path }}"><i class="bi bi-clipboard2-pulse"></i> Muayene / Reçete</a></li>
-      <li><a href="{{ url_for('servis') }}" class="{{ 'active' if '/servis' in request.path }}"><i class="bi bi-hospital"></i> Servis / Yatış</a></li>
-      <li><a href="{{ url_for('ameliyat') }}" class="{{ 'active' if '/ameliyat' in request.path }}"><i class="bi bi-bandaid"></i> Ameliyat</a></li>
-      <li><a href="{{ url_for('tetkik') }}" class="{{ 'active' if '/tetkik' in request.path }}"><i class="bi bi-clipboard2-data"></i> Tetkik İstem</a></li>
-      {% if session.get('rol') == 'Yönetici' %}
-      <li><a href="{{ url_for('personel') }}" class="{{ 'active' if '/personel' in request.path }}"><i class="bi bi-gear"></i> Personel Yönetimi</a></li>
-      {% endif %}
-    </ul>
+        <ul class="nav flex-column">
+          <li><a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path=='/' }}"><i class="bi bi-speedometer2"></i> Kontrol Paneli</a></li>
+          {% if modul_yetkili('hasta') %}
+          <li><a href="{{ url_for('hastalar') }}" class="{{ 'active' if '/hastalar' in request.path }}"><i class="bi bi-person-vcard"></i> Hasta Kayıt</a></li>
+          {% endif %}
+          {% if modul_yetkili('doktor') %}
+          <li><a href="{{ url_for('doktorlar') }}" class="{{ 'active' if '/doktorlar' in request.path }}"><i class="bi bi-person-badge"></i> Doktorlar</a></li>
+          {% endif %}
+          {% if modul_yetkili('poliklinik') %}
+          <li><a href="{{ url_for('poliklinikler') }}" class="{{ 'active' if '/poliklinikler' in request.path }}"><i class="bi bi-building"></i> Poliklinikler</a></li>
+          {% endif %}
+          {% if modul_yetkili('randevu') %}
+          <li><a href="{{ url_for('randevular') }}" class="{{ 'active' if '/randevular' in request.path }}"><i class="bi bi-calendar-check"></i> Randevular</a></li>
+          {% endif %}
+          {% if modul_yetkili('muayene') %}
+          <li><a href="{{ url_for('muayene') }}" class="{{ 'active' if '/muayene' in request.path }}"><i class="bi bi-clipboard2-pulse"></i> Muayene / Reçete</a></li>
+          {% endif %}
+          {% if modul_yetkili('servis') %}
+          <li><a href="{{ url_for('servis') }}" class="{{ 'active' if '/servis' in request.path }}"><i class="bi bi-hospital"></i> Servis / Yatış</a></li>
+          {% endif %}
+          {% if modul_yetkili('ameliyat') %}
+          <li><a href="{{ url_for('ameliyat') }}" class="{{ 'active' if '/ameliyat' in request.path }}"><i class="bi bi-bandaid"></i> Ameliyat</a></li>
+          {% endif %}
+          {% if modul_yetkili('tetkik') %}
+          <li><a href="{{ url_for('tetkik') }}" class="{{ 'active' if '/tetkik' in request.path }}"><i class="bi bi-clipboard2-data"></i> Tetkik İstem</a></li>
+          {% endif %}
+          {% if modul_yetkili('personel') %}
+          <li><a href="{{ url_for('personel') }}" class="{{ 'active' if '/personel' in request.path }}"><i class="bi bi-gear"></i> Personel Yönetimi</a></li>
+          {% endif %}
+          {% if modul_yetkili('log') %}
+          <li><a href="{{ url_for('loglar') }}" class="{{ 'active' if '/loglar' in request.path }}"><i class="bi bi-journal-text"></i> Log Kayıtları</a></li>
+          {% endif %}
+        </ul>
     <div class="mt-auto p-3 text-white-50 small">v1.0 &copy; RequiemHBYS</div>
   </nav>
 
