@@ -17,17 +17,16 @@
         <option value="">Seçiniz</option>
         {% for d in doktorlar %}<option value="{{ d.id }}">{{ d.ad_soyad }} ({{ d.poliklinik }})</option>{% endfor %}
       </select>
-    </div>
     <div class="row g-3">
-      <div class="col-md-6">
-        <label class="form-label">Tarih (gg.aa.yyyy) *</label>
-        <input class="form-control" name="tarih" required>
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Saat (ss:dd) *</label>
-        <input class="form-control" name="saat" required>
-      </div>
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">Tarih *</label>
+                <input type="date" class="form-control" name="tarih" onclick="this.showPicker()" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Saat *</label>
+                <input type="time" class="form-control" name="saat" onclick="this.showPicker()" required>
+            </div>
+        </div>
     <div class="mt-4">
       <button class="btn btn-success"><i class="bi bi-check-circle"></i> Randevu Oluştur</button>
       <a href="{{ url_for('randevular') }}" class="btn btn-secondary">Vazgeç</a>
